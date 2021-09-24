@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+<head>
+    <title>{% block title %}Auctions{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+    </head>
+    <style>
+        .html,body{
+             height:100vh;
+        }
+        body {
+             background-image: url("{% static '/media/istockphoto-467101890-612x612.jpg' %}" );
+             background-position: center center;
+             background-repeat: no-repeat;
+             background-attachment: fixed;
+             background-size: cover;
+             background-color: #FFF;
+             text-align: center;
+             color: rgb(136, 45, 45);
+             font-family: "Times New Roman", Times, serif;
+        }
+        </style> 
+<body>
+
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center ">
+        <div class="col-md-5 p-lg-5 mx-auto my-5" >
+          <h1 class="display-3 fw-normal text-light">WineAuctions </h1>
+          <p class="lead fw-normal"><i class="fas fa-wine-bottle text-light">"Make wine your bid. Make your bid matter."</i> </p>
+          
+        </div>
+        </div>
+<!-- {% load static %} <img src="{% static "/media/istockphoto-467101890-612x612.jpg" %}" alt="home" />-->
+
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Third navbar example">
+            <div class="container-fluid">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarsExample03">
+                <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'categories' %}">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_listings' %}">Create Listings</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+                {% endif %}
+                </ul>
+              </div>
+            </div>
+          </nav>
+    <div class="container-fluid  py-5"></div>
+        <style>.alto{min-height:250px;}</style>
+        <div class="row justify-content-center alto">
+            <div class="row justify-content-center">
+                <div class="container">{% block body %}
+                    {% endblock %}</div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+          <div class="col-md-4 d-flex align-items-center">
+            <span class="text-muted">{% if user.is_authenticated %}
+                Signed in as <strong>{{ user.username }}</strong>.
+                {% else %}
+                Not signed in.
+                {% endif %}</span>
+          </div> 
+        </footer>
+      </div>
+
+
+
+
+  
+
+</body>
+
+</html>

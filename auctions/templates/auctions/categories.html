@@ -1,0 +1,19 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h1 class="text-light">Categories</h1>
+<div class="list-group">
+  {% for category in categories %}
+  <a href="{% url 'show' category.0 %}">
+
+    {{ category.1 }}
+  </a>
+  {% endfor %}
+
+</div>
+
+
+{% endblock %}
+<!--Categories: Users should be able to visit a page that displays a list of all listing categories. 
+    Clicking on the name of any category should take the user to a page that displays 
+    all of the active listings in that category.-->
