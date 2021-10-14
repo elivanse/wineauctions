@@ -12,7 +12,12 @@ dicCategorie = {
     ("mc","Malbec"),
     ("cs","Cabernet Sauvignon"),
     ("sy", "Syrah"),
-    ("pn","Pinot Noir")
+    ("pn","Pinot Noir"),
+    ("sb","Sauvignon Blanc"),
+    ("cf","Cabernet Franc"),
+    ("cd","Chardonnay"),
+    ("sh","Shiraz"),
+    ("pb","Pinot Blanc")
 }
 
 #usuarios

@@ -22,7 +22,7 @@ def login_view(request):
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "auctions/login.html", {
-                "message": "Invalid username and/or password."
+                "message": "User or Password."
             })
     else:
         return render(request, "auctions/login.html")
@@ -41,14 +41,14 @@ def register_view(request):
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(request, "auctions/register.html", {
-                "message": "Passwords must match."
+                "message": "Error. Passwords are different."
             })
         try:
             usr = User.objects.create_user(username, email, password)
             usr.save()
         except IntegrityError:
             return render(request, "auctions/register.html", {
-                "message": "Username already taken."
+                "message": "Error. User exists."
             })
         login(request,usr)
         return HttpResponseRedirect(reverse("index"))
@@ -69,7 +69,13 @@ def active_listings_view(request):
 
 @login_required
 def create_listings_view(request):
-    return render(request, "auctions/create_listings.html")
+    return render(request, "auctions/create_listings.html",{
+        "categories": dicCategorie,
+        })
+@login_required
+def submit(request):
+    if request.method=="POST":
+        
 
 @login_required
 def listings_view(request):

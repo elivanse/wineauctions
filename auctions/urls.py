@@ -13,7 +13,7 @@ urlpatterns = [
     path("comment", views.comment_view, name="comment"),
     path("create_listings", views.create_listings_view, name="create_listings"),
     path("active_listings", views.active_listings_view, name="active_listings"),
-    path("listings", views.listings_view, name="listings"),
+    path("listings/<int:auction>", views.listings_view, name="listings"),
     path("register", views.register_view, name="register")
 ]
 urlpatterns += staticfiles_urlpatterns()
