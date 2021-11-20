@@ -50,46 +50,77 @@ def register_view(request):
             return render(request, "auctions/register.html", {
                 "message": "Error. User exists."
             })
-        login(request,usr)
+        login(request, usr)
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
 
 @login_required
 def watchlist_view(request):
     return render(request, "auctions/watchlist.html")
 
+
 @login_required
-def comment_view(request):   
+def comment_view(request):
     return render(request, "auctions/comment.html")
+
 
 @login_required
 def active_listings_view(request):
-    return render(request, "auctions/active_listings.html")
+    items = auction_lst.objects.all()
+    empty = False
+    if len(items) == 0:
+        empty = True
+    return render(request, "auctions/active_listings.html",{"items":items,"empty":empty})
+
 
 @login_required
 def create_listings_view(request):
-    return render(request, "auctions/create_listings.html",{
-        "categories": dicCategorie,
+    if request.method=='POST':
+        listing = auction_lst()
+        listing.title = request.POST["title"]
+        listing.description = request.POST["description"]
+        listing.starting_bid = request.POST["starting_bid"]
+        listing.category = request.POST["category"]
+        listing.photo = request.POST["photo"]
+        listing.save()
+        #listings_all = listing.objects.all()
+        empty = False
+        #if len(listings_all) == 0:
+        #    empty = True
+        return render(request, "auctions/active_listings.html", {
+            #"products": products,
+            #"empty": empty
+            "categories": dicCategorie,
         })
+    else:
+        return render(request, "auctions/create_listings.html", {
+        "categories": dicCategorie,
+    })
+
+
 @login_required
 def submit(request):
-    if request.method=="POST":
-        
+    if request.method == "POST":
+        return "something"
+
 
 @login_required
 def listings_view(request):
     return render(request, "auctions/listings.html")
+
 
 @login_required
 def categories_view(request):
     return render(request, 'auctions/categories.html', {
         "categories": dicCategorie,
     })
-    
+
+
 @login_required
-def category_listings(request,category):
-    listings = Listing.objects.filter(category__in = category[0])
+def category_listings(request, category):
+    listings = Listing.objects.filter(category__in=category[0])
     cat = dict(dicCategorie)
     return render(request, 'auctions/categorie.html', {
         "listings": listings,
