@@ -79,7 +79,7 @@ def create_listings_view(request):
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "auctions/create_listings.html",{"categories": dicCategorie,})
-
+"aca me parece ue va un else"
 @login_required
 def submit(request):
     if request.method=="POST":
