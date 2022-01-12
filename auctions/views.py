@@ -8,10 +8,8 @@ from .models import *
 from .forms import *
 
 
-
 def index(request):
-    return render(request, "auctions/index.html",{"listings":listing.objects.all()})
-
+    return render(request, "auctions/index.html", {"listings": listing.objects.all()})
 
 
 def login_view(request):
@@ -28,10 +26,11 @@ def login_view(request):
             })
     else:
         return render(request, "auctions/login.html")
+
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 
 @login_required
@@ -41,17 +40,14 @@ def categories_view(request):
     })
 
 
-
 @login_required
-def category_listings(request,category):
-    listings = Listing.objects.filter(category__in = category[0])
+def category_listings(request, category):
+    listings = Listing.objects.filter(category__in=category[0])
     cat = dict(dicCategorie)
     return render(request, 'auctions/categorie.html', {
         "listings": listings,
         "category": cat[category]
-
     })
-
 
 
 @login_required
@@ -59,32 +55,32 @@ def watchlist_view(request):
     return render(request, "auctions/watchlist.html")
 
 
-
 @login_required
 def comment_view(request):
     return render(request, "auctions/comment.html")
 
 
-
-
 @login_required
 def create_listings_view(request):
-    if request.method == "POST": 
-        user = User.objects.get(username = request.user)
+    if request.method == "POST":
+        user = User.objects.get(username=request.user)
         form = listing_form(request.POST, request.FILES)
+        print(form)
         if form.is_valid():
             listing = form.save(commit=False)
             listing.owner = user
             listing.save()
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "auctions/create_listings.html",{"categories": dicCategorie,})
-"aca me parece ue va un else"
+            return render(request, "auctions/create_listings.html", {"form": listing_form(), "categories": dicCategorie})
+    else:
+        return render(request, "auctions/create_listings.html", {"categories": dicCategorie})
+
+
 @login_required
 def submit(request):
-    if request.method=="POST":
+    if request.method == "POST":
         return()
-
 
 
 @login_required
@@ -92,11 +88,9 @@ def active_listings_view(request):
     return render(request, "auctions/active_listings.html")
 
 
-
 @login_required
 def listings_view(request):
     return render(request, "auctions/listings.html")
-
 
 
 def register_view(request):
@@ -116,7 +110,7 @@ def register_view(request):
             return render(request, "auctions/register.html", {
                 "message": "Error. User exists."
             })
-        login(request,usr)
+        login(request, usr)
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")

@@ -1,57 +1,57 @@
-<!--Create Listing: Users should be able to visit a page to create a new listing. 
-    They should be able to specify a title for the listing, a text-based description, 
-    and what the starting bid should be. Users should also optionally be able to provide a 
+<!--Create Listing: Users should be able to visit a page to create a new listing.
+    They should be able to specify a title for the listing, a text-based description,
+    and what the starting bid should be. Users should also optionally be able to provide a
     URL for an image for the listing and/or a category (e.g. Fashion, Toys, Electronics, Home, etc.).
 -->
 {% extends "auctions/layout.html" %}
 
 {% block body %}
 <div class="row">
-    <div class="col-6 col-md-4"></div>
-    <div class="col-6 col-md-4">
-        <h2 class="text-light">Create listings</h2>
-    </div>
+  <div class="col-6 col-md-4"></div>
+  <div class="col-6 col-md-4">
+    <h2 class="text-light">Create listings</h2>
+  </div>
 </div>
 <div class="row">
-    <div class="col-6 col-md-4"></div>
-    <div class="col-6 col-md-4">
-        <form action="{% url 'create_listings' %}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <input class="form-control" type="text" name="title" id="title" placeholder="Title">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="textarea" name="title" id="title" placeholder="Description">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="text" name="title" id="title" placeholder="Starting Bid">
-            </div>
-            <div class="card text-left">
-                <img class="card-img-top" src="holder.js/100px180/" alt="">
-                <div class="card-body">
-                    <h4 class="card-title">Variety</h4>
-                    <p class="card-text">
-                    <fieldset class="form-group">
-                        <div class="row">
-                            <div class="col">
-                                {% for category in categories %}
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="rdWineType"
-                                        id="{{ category.0 }}">
-                                    <label class="form-check-label" for="{{ category.0 }}">{{ category.1 }}</label>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </fieldset> </p>
+  <div class="col-6 col-md-4"></div>
+  <div class="col-6 col-md-4">
+    <form enctype="multipart/form-data" action="{% url 'create_listings' %}" method="post">
+      {% csrf_token %}
+      {{listing_form}}
+      <div class="form-group">
+        <input class="form-control" type="text" name="item" id="item" placeholder="Item">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="textarea" name="description" id="description" placeholder="Description">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" name="price" id="price" placeholder="Price">
+      </div>
+      <div class="card text-left">
+        <div class="card-body">
+          <h4 class="card-title">Variety</h4>
+          <p class="card-text">
+          <fieldset class="form-group">
+            <div class="row">
+              <div class="col">
+                {% for category in categories %}
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="category" id="category" value="{{ category.0 }}" >
+                  <label class="form-check-label" for="{{ category.0 }}">{{ category.1 }}</label>
                 </div>
-            </div>"
-            <div class="form-group">
-                <input class="form-control" autofocus type="text" name="imgLink" placeholder="Image link">
+                {% endfor %}
+              </div>
             </div>
-            <input class="btn btn-primary" type="submit" value="Guardar">
-        </form>
-    </div>
+          </fieldset>
+          </p>
+        </div>
+      </div>"
+      <div class="form-group">
+        <input class="form-control" autofocus type="text" name="photo" id="photo" placeholder="Image link">
+      </div>
+      <input class="btn btn-primary" type="submit" value="Guardar">
+    </form>
+  </div>
 </div>
 
 {% endblock %}

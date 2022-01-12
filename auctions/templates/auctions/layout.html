@@ -3,9 +3,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
-
-
 <head>
   <title>{% block title %}Auctions{% endblock %}</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -26,7 +23,7 @@
     background-size: cover;
     background-color: #FFF;
     text-align: center;
-    color: rgb(136, 45, 45);
+    /*color: rgb(136, 45, 45);*/
     font-family: "Times New Roman", Times, serif;
   }
 </style>
@@ -81,16 +78,10 @@
   </nav>
   <div class="container-fluid justify-content-center">
 
-
-
     {% block body %}
     {% endblock %}
 
   </div>
-
-
-
-
 
   <div class="container">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
@@ -104,11 +95,5 @@
     </footer>
   </div>
 
-
-
-
-
-
 </body>
-
 </html>
