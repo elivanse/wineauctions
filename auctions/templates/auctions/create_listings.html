@@ -10,44 +10,14 @@
   <div class="col-6 col-md-4"></div>
   <div class="col-6 col-md-4">
     <h2 class="text-light">Create listings</h2>
-  </div>
-</div>
-<div class="row">
-  <div class="col-6 col-md-4"></div>
-  <div class="col-6 col-md-4">
-    <form enctype="multipart/form-data" action="{% url 'create_listings' %}" method="post">
+    <form enctype="multipart/form-data" action="{% url 'create_listings' %}" method="POST">
       {% csrf_token %}
-      {{listing_form}}
-      <div class="form-group">
-        <input class="form-control" type="text" name="item" id="item" placeholder="Item">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="textarea" name="description" id="description" placeholder="Description">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="text" name="price" id="price" placeholder="Price">
-      </div>
-      <div class="card text-left">
-        <div class="card-body">
-          <h4 class="card-title">Variety</h4>
-          <p class="card-text">
-          <fieldset class="form-group">
-            <div class="row">
-              <div class="col">
-                {% for category in categories %}
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="category" id="category" value="{{ category.0 }}" >
-                  <label class="form-check-label" for="{{ category.0 }}">{{ category.1 }}</label>
-                </div>
-                {% endfor %}
-              </div>
-            </div>
-          </fieldset>
-          </p>
+      <div class="row">
+        <div class="col-6 col-md-4">
+          <div class="card" style="width: 18rem;">
+          {{ form.as_table }}
+          </div>
         </div>
-      </div>"
-      <div class="form-group">
-        <input class="form-control" autofocus type="text" name="photo" id="photo" placeholder="Image link">
       </div>
       <input class="btn btn-primary" type="submit" value="Guardar">
     </form>

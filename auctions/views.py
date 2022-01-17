@@ -72,9 +72,9 @@ def create_listings_view(request):
             listing.save()
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "auctions/create_listings.html", {"form": listing_form(), "categories": dicCategorie})
+            return render(request, "auctions/create_listings.html", {"form": form, "categories": dicCategorie})
     else:
-        return render(request, "auctions/create_listings.html", {"categories": dicCategorie})
+        return render(request, "auctions/create_listings.html", {"form": listing_form(), "categories": dicCategorie})
 
 
 @login_required

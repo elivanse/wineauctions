@@ -61,7 +61,8 @@ class listing(models.Model):
     bids = models.ManyToManyField(bids, blank=True, related_name="bids")
     comments = models.ManyToManyField(
        comment, blank=True, related_name="comments")
-    photo = models.ImageField(null=True, blank=True)
+    photo = models.ImageField(
+       upload_to='static/media/', null=True, blank=True)
     closed = models.BooleanField(default=False)
 
 #favoritos
