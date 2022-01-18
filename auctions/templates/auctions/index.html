@@ -10,27 +10,27 @@
         </ul> -->
 <div class="container">
   <div class="card-group">
-{% for listing in listings %}
-{% if not listing.closed %}
-<style>
-.card-img-top {
-    width: 100%;
-    height: 15vw;
-    object-fit: contain;
-}
-</style>
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="{{ listing.photo }}" alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">{{ listing.description }}</h5>
-    <p class="card-text">Actual prize: ${{ listing.price }}, top horizon: {{ listing.tophorizon }}</p>
-    <a href="#" class="btn btn-primary">go to listing</a>
-  </div>
-</div>
+    {% for listing in listings %}
+    {% if not listing.closed %}
+    <style>
+      .card-img-top {
+        width: 100%;
+        height: 15vw;
+        object-fit: contain;
+      }
+    </style>
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" src="{{ listing.photo }}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{ listing.description }}</h5>
+        <p class="card-text">Actual prize: ${{ listing.price }}, top horizon: {{ listing.tophorizon }}</p>
+        <a href="{% url 'listing' listing.id %}" class="btn btn-primary">go to listing</a>
+      </div>
+    </div>
 
-{% endif %}
-{% endfor %}
-</div>
+    {% endif %}
+    {% endfor %}
+  </div>
 </div>
 {% endif %}
 {% endblock %}

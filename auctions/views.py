@@ -89,8 +89,53 @@ def active_listings_view(request):
 
 
 @login_required
-def listings_view(request):
-    return render(request, "auctions/listings.html")
+def listings_view(request, idListing):
+    listing = Listing.objects.get(pk=idListing)
+    if request.method == "POST":
+        user = User.objects.get(username=request.user)
+        if request.POST.get("button") == "Watchlist":
+            if not user.watchlist.filter(listing=listing):
+                watchlist = watchlist()
+                watchlist.user = user
+                watchlist.listing = listing
+                watchlist.save()
+            else:
+                user.watchlist.filter(listing=listing).delete()
+            return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+        if not listing.closed:
+            if request.POST.get("button") == "Close":
+                listing.closed = True
+                listing.save()
+            else:
+                price = float(request.POST["price"])
+                bids = listing.bids.all()
+                if user.username != listing.owner.username:  # only let those who dont own the listing be able to bid
+                    if price <= listing.price:
+                        return render(request, "auctions/listing.html", {
+                            "listing": listing,
+                            "form": BidForm(),
+                            "message": "Error! Invalid bid amount!"
+                        })
+                    form = BidForm(request.POST)
+                    if form.is_valid():
+                        # clean up this
+                        bid = form.save(commit=False)
+                        bid.user = user
+                        bid.save()
+                        listing.bids.add(bid)
+                        listing.price = price
+                        listing.save()
+                    else:
+                        return render(request, 'auctions/listing.html', {
+                            "form": form
+                        })
+        return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+    else:
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "form": BidForm(),
+            "message": ""
+        })
 
 
 def register_view(request):

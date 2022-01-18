@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-#Models: Your application should have at least three models in
+# Models: Your application should have at least three models in
 # addition to the User model: one for auction listings,
 # one for bids, and one for comments made on auction listings.
 # It’s up to you to decide what fields each model should have,
@@ -20,33 +20,33 @@ dicCategorie = {
     ("pb", "Pinot Blanc")
 }
 
-#usuarios
+# usuarios
 
 
 class User(AbstractUser):
-   pass
+    pass
 
 
 class comment(models.Model):
 
     idUser = models.ForeignKey(
-       User, on_delete=models.CASCADE, related_name="comment_user")
+        User, on_delete=models.CASCADE, related_name="comment_user")
     title = models.CharField(max_length=25, default="")
     comment = models.CharField(max_length=255)
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
-#ofertas
+# ofertas
 
 
-class bids(models.Model):
+class bid(models.Model):
 
     idUser = models.ForeignKey(
-       User, on_delete=models.CASCADE, related_name="bids_user")
+        User, on_delete=models.CASCADE, related_name="bids_user")
     time = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
 
-#subastas
+# subastas
 class listing(models.Model):
 
     item = models.CharField(max_length=255)
@@ -54,24 +54,24 @@ class listing(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.CharField(max_length=67, choices=dicCategorie)
     tophorizon = models.DateTimeField(auto_now_add=True, blank=True)
-    #idUser = models.ForeignKey(
+    # idUser = models.ForeignKey(
     #  User, on_delete=models.CASCADE, related_name="listing_user")
     owner = models.ForeignKey(
-       User, on_delete=models.CASCADE, related_name="owners")
-    bids = models.ManyToManyField(bids, blank=True, related_name="bids")
+        User, on_delete=models.CASCADE, related_name="owners")
+    bid = models.ManyToManyField(bid, blank=True, related_name="bid")
     comments = models.ManyToManyField(
-       comment, blank=True, related_name="comments")
+        comment, blank=True, related_name="comments")
     photo = models.ImageField(
-       upload_to='static/media/', null=True, blank=True)
+        upload_to='static/media/', null=True, blank=True)
     closed = models.BooleanField(default=False)
 
-#favoritos
+# favoritos
 
 
 class watchlist(models.Model):
 
     wlTitle = models.CharField(max_length=64)
     user = models.ForeignKey(
-       User, on_delete=models.CASCADE, related_name="watchlist")
+        User, on_delete=models.CASCADE, related_name="watchlist")
     listing = models.ForeignKey(
-       listing,  on_delete=models.CASCADE, related_name="listings")
+        listing,  on_delete=models.CASCADE, related_name="listings")
