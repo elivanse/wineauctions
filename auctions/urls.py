@@ -12,7 +12,7 @@ urlpatterns = [
     path("watchlist", views.watchlist_view, name="watchlist"),
     path("comment", views.comment_view, name="comment"),
     path("create_listings", views.create_listings_view, name="create_listings"),
-    path("listing/<int:item>", views.listings_view, name="listing"),
+    path("listing/<int:id>", views.listings_view, name="listing"),
     path("register", views.register_view, name="register")
 ]
 urlpatterns += staticfiles_urlpatterns()

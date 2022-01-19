@@ -13,3 +13,9 @@ class bid_form(ModelForm):
     class Meta:
         model = bid
         fields = ["price"]
+
+
+class comment_form(ModelForm):
+    class Meta:
+        model = comment
+        fields = ["title", "comment"]

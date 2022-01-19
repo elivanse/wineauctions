@@ -74,4 +74,4 @@ class watchlist(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="watchlist")
     listing = models.ForeignKey(
-        listing,  on_delete=models.CASCADE, related_name="listings")
+        listing,  on_delete=models.CASCADE, related_name="listing")

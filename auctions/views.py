@@ -89,52 +89,77 @@ def active_listings_view(request):
 
 
 @login_required
-def listings_view(request, idListing):
-    listing = Listing.objects.get(pk=idListing)
+def listings_view(request, id):
+    Listing = listing.objects.get(pk=id)
     if request.method == "POST":
         user = User.objects.get(username=request.user)
         if request.POST.get("button") == "Watchlist":
-            if not user.watchlist.filter(listing=listing):
+            if not user.watchlist.filter(listing=Listing):
                 watchlist = watchlist()
                 watchlist.user = user
-                watchlist.listing = listing
+                watchlist.listing = Listing
                 watchlist.save()
             else:
-                user.watchlist.filter(listing=listing).delete()
-            return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
-        if not listing.closed:
+                user.watchlist.filter(listing=Listing).delete()
+            return HttpResponseRedirect(reverse('listing', args=(Listing.id,)))
+        if not Listing.closed:
             if request.POST.get("button") == "Close":
-                listing.closed = True
-                listing.save()
+                Listing.closed = True
+                Listing.save()
             else:
                 price = float(request.POST["price"])
-                bids = listing.bids.all()
-                if user.username != listing.owner.username:  # only let those who dont own the listing be able to bid
-                    if price <= listing.price:
+                bid = Listing.bids.all()
+                if user.username != Listing.owner.username:  # only let those who dont own the listing be able to bid
+                    if price <= Listing.price:
                         return render(request, "auctions/listing.html", {
-                            "listing": listing,
-                            "form": BidForm(),
+                            "listing": Listing,
+                            "form": bid_form(),
                             "message": "Error! Invalid bid amount!"
                         })
-                    form = BidForm(request.POST)
+                    form = bid_form(request.POST)
                     if form.is_valid():
                         # clean up this
                         bid = form.save(commit=False)
                         bid.user = user
                         bid.save()
-                        listing.bids.add(bid)
-                        listing.price = price
-                        listing.save()
+                        Listing.bid.add(bid)
+                        Listing.price = price
+                        Listing.save()
                     else:
                         return render(request, 'auctions/listing.html', {
                             "form": form
                         })
-        return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+        return HttpResponseRedirect(reverse('listing', args=(Listing.id,)))
     else:
         return render(request, "auctions/listing.html", {
-            "listing": listing,
-            "form": BidForm(),
+            "listing": Listing,
+            "form": bid_form(),
             "message": ""
+        })
+
+
+def comment_view(request, id):
+    user = User.objects.get(username=request.user)
+    Listing = listing.objects.get(pk=id)
+    if request.method == "POST":
+        form = comment_form(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = user
+            comment.save()
+            Listing.comments.add(comment)
+            Listing.save()
+
+            return HttpResponseRedirect(reverse('listing', args=(Listing.id,)))
+        else:
+            return render(request, "auctions/comment.html", {
+                "form": form,
+                "listing_id": Listing.id,
+            })
+    else:
+        return render(request, "auctions/comment.html", {
+            "form": comment_form(),
+            "listing_id": Listing.id
         })
 
 
