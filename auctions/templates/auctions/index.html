@@ -23,7 +23,6 @@
       <img class="card-img-top" src="{{ listing.photo }}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">{{ listing.description }}</h5>
-        <p class="card-text">Actual prize: ${{ listing.price }}, top horizon: {{ listing.tophorizon }}</p>
         <a href="{% url 'listing' listing.id %}" class="btn btn-primary">go to listing</a>
       </div>
     </div>

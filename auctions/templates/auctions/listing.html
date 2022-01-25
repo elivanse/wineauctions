@@ -1,93 +1,97 @@
 {% extends 'auctions/layout.html' %}
 
 {% block body %}
-  {% if listing.closed %}
+{% if listing.closed %}
+<h1 class="text-light">
+    This listing is no longer available!
+</h1>
 
+{% endif %}
+<div class="container">
+    <div class="card-group">
+        <div class="card" style="width: 18rem;">
+            <form action="{% url 'listing' listing.id %}" method="POST">
+                {% csrf_token %}
+            </form>
+            <div class="card-body">
+                <div class="card-title">
+                    <h4>Listing</h4>
+                </div>
+                <img src="{{ listing.photo.url }}" alt="image" style="width: 300px; height: auto">
+                <div class="card-text">{{ listing.description }}</div>
+                <p class="card-text">Price: ${{ listing.price }}</p>
+                <p class="card-text">Top Horizon: {{ listing.tophorizon }}
+                <p>{{ message }}</p>
+            </div>
+            <form action="{% url 'watchlist' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" name="button" class="btn btn-primary" value="Watchlist">Add to my Watchlist</button>
+            </form>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <form action="{% url 'listing' listing.id %}" method="POST">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="card-title"><h4>Bids</h4></div>
+                    <p class="card-text">{{ listing.bids.count }} bid(s) so far. Your bid is the current bid</p>
+                    {{ form }}
+                    <input type="submit" name="button" class="btn btn-primary" value="Place Bid">
+                    <h5>Details</h5>
+                    <h6>Listed by: {{ listing.owner }}</h6>
+                    <h6>Category: {{ listing.category }}</h6>
+                    {% if listing.closed %}
+                    <h4>Winner: {{ listing.bids.last.user.username }}</h4>
+                    {% endif %}
+                    {% if user.username == listing.owner.username and not listing.closed %}
+                    <form action="{% url 'listing' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name="button" class="btn btn-danger" value="Close">Close</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <div class="card-title"><h4>Comments</h4></div>
+                {% for comment in listing.comments.all %}
+                <div class="card-title">
+                    <h5>
+                        {{ comment.title }}
+                    </h5>
+                </div>
+                <div class="card-text">
+                    <p>{{ comment.comment }}</p>
+                    <h7>{{ comment.time }}</h7>
+                </div>
+                {% endfor %}
+                <form action="{% url 'comment' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="button" class="btn btn-primary" value="Comment">Add comment</button>
+                    <!--<a href=" url 'comment' "><span class="badge badge-primary">Add a Comment!</span></a>-->
+                </form>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+    <!--Listing Page: Clicking on a listing should take users to a page specific to that listing.
+        On that page, users should be able to view all details about the listing,
+        including the current price for the listing.
 
-      This listing is no longer available!
+        If the user is signed in, the user should be able to add the item to their “Watchlist.”
+        If the item is already on the watchlist, the user should be able to remove it.
 
+        If the user is signed in, the user should be able to bid on the item. The bid must be
+        at least as large as the starting bid, and must be greater than any other bids that
+        have been placed (if any). If the bid doesn’t meet those criteria, the user should be presented with an error.
 
-  {% endif %}
+        If the user is signed in and is the one who created the listing, the user should have
+        the ability to “close” the auction from this page, which makes the highest bidder the winner of the auction
+        and makes the listing no longer active.
 
-{{ listing.item }}
+        If a user is signed in on a closed listing page, and the user has won that auction, the page should say so.
 
-
-
-    <form action="{% url 'listing' listing.id %}" method="POST">
-      {% csrf_token %}
-      <button type="submit" name="button" value="Watchlist">Watchlist</button>
-    </form>
-
-
-
-
-    <img src="{{ listing.image.url }}" alt="image" style="width: 300px; height: auto">
-
-
-
-{{ listing.description }}
-${{ listing.price }}
-    <p>{{ message }}</p>
-    <form action="{% url 'listing' listing.id %}" method="POST">
-      {% csrf_token %}
-      <div class="form-group">
-        <label for="bid">{{ listing.bids.count }} bid(s) so far. Your bid is the current bid</label>
-      </div>
-      <div class="form-group">
-        {{ form }}
-      </div>
-      <div class="form-group">
-        <input type="submit" name="button" class="btn btn-primary" value="Place Bid">
-      </div>
-    </form>
-  </div>
-  <div>
-    <h4>Details</h4>
-    <ul>
-      <li>Listed by: {{ listing.owner }}</li>
-      <li>Category: {{ listing.category }}</li>
-      {% if listing.closed %}
-        <li><strong>Winner: </strong>{{ listing.bids.last.user.username }}</li>
-      {% endif %}
-    </ul>
-    {% if user.username == listing.owner.username and not listing.closed %}
-    <form action="{% url 'listing' listing.id %}" method="POST">
-      {% csrf_token %}
-      <button type="submit" name="button" class="btn btn-danger" value="Close">Close</button>
-    </form>
-    {% endif %}
-  </div>
-
-  <div>
-    <h4>Comments</h4>
-    <a href="{% url 'comment' listing.id %}"><span class="badge badge-primary">Add a Comment!</span></a>
-
-    {% for comment in listing.comments.all %}
-      <div class="container m3-5 p-2 border">
-        <p><strong>{{ comment.title }}</strong></p>
-        <p class="mt-n2">{{ comment.comment }}</p>
-        <p class="mt-n3"><small>{{ comment.time }}</small></p>
-      </div>
-    {% endfor %}
-  </div>
-{% endblock %}
-<!--Listing Page: Clicking on a listing should take users to a page specific to that listing.
-    On that page, users should be able to view all details about the listing,
-    including the current price for the listing.
-
-    If the user is signed in, the user should be able to add the item to their “Watchlist.”
-    If the item is already on the watchlist, the user should be able to remove it.
-
-    If the user is signed in, the user should be able to bid on the item. The bid must be
-     at least as large as the starting bid, and must be greater than any other bids that
-     have been placed (if any). If the bid doesn’t meet those criteria, the user should be presented with an error.
-
-    If the user is signed in and is the one who created the listing, the user should have
-    the ability to “close” the auction from this page, which makes the highest bidder the winner of the auction
-    and makes the listing no longer active.
-
-    If a user is signed in on a closed listing page, and the user has won that auction, the page should say so.
-
-    Users who are signed in should be able to add comments to the listing page. The listing page should
-    display all comments that have been made on the listing.
--->
+        Users who are signed in should be able to add comments to the listing page. The listing page should
+        display all comments that have been made on the listing.
+    -->
