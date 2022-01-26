@@ -52,12 +52,38 @@ def category_listings(request, category):
 
 @login_required
 def watchlist_view(request):
-    return render(request, "auctions/watchlist.html")
+    user = User.objects.get(username=request.user)
+    return render(request, "auctions/watchlist.html", {
+        "watchlist": user.watchlist.all()
+    })
+
 
 
 @login_required
-def comment_view(request):
-    return render(request, "auctions/comment.html")
+def comment_view(request,id):
+    user = User.objects.get(username=request.user)
+    listing = Listing.objects.get(pk=id)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = user
+            comment.save()
+            listing.comments.add(comment)
+            listing.save()
+
+            return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+        else:
+            return render(request, "auctions/comment.html", {
+                "form": form,
+                "listing_id": listing.id,
+            })
+    else:
+        return render(request, "auctions/comment.html", {
+            "form": CommentForm(),
+            "listing_id": listing.id
+        })
+
 
 
 @login_required

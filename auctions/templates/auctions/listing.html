@@ -65,7 +65,7 @@
                     <h7>{{ comment.time }}</h7>
                 </div>
                 {% endfor %}
-                <form action="{% url 'comment' %}" method="POST">
+                <form action="{% url 'comment' listing.id %}" method="POST">
                     {% csrf_token %}
                     <button type="submit" name="button" class="btn btn-primary" value="Comment">Add comment</button>
                     <!--<a href=" url 'comment' "><span class="badge badge-primary">Add a Comment!</span></a>-->
