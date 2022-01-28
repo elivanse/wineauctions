@@ -4,8 +4,9 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import *
+
 from .forms import *
+from .models import *
 
 
 def index(request):
@@ -42,9 +43,9 @@ def categories_view(request):
 
 @login_required
 def category_listings(request, category):
-    listings = Listing.objects.filter(category__in=category[0])
+    listings = listing.objects.filter(category__in=category[0])
     cat = dict(dicCategorie)
-    return render(request, 'auctions/categorie.html', {
+    return render(request, 'auctions/specific.html', {
         "listings": listings,
         "category": cat[category]
     })
@@ -57,32 +58,6 @@ def watchlist_view(request):
         "watchlist": user.watchlist.all()
     })
 
-
-
-@login_required
-def comment_view(request,id):
-    user = User.objects.get(username=request.user)
-    listing = Listing.objects.get(pk=id)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = user
-            comment.save()
-            listing.comments.add(comment)
-            listing.save()
-
-            return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
-        else:
-            return render(request, "auctions/comment.html", {
-                "form": form,
-                "listing_id": listing.id,
-            })
-    else:
-        return render(request, "auctions/comment.html", {
-            "form": CommentForm(),
-            "listing_id": listing.id
-        })
 
 
 

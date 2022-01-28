@@ -29,8 +29,8 @@ class User(AbstractUser):
 
 class comment(models.Model):
 
-    idUser = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="comment_user")
+    #idUser = models.ForeignKey(
+    #    User, on_delete=models.CASCADE, related_name="comment_user")
     title = models.CharField(max_length=25, default="")
     comment = models.CharField(max_length=255)
     time = models.DateTimeField(auto_now_add=True, blank=True)
