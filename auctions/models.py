@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
 # Models: Your application should have at least three models in
 # addition to the User model: one for auction listings,
 # one for bids, and one for comments made on auction listings.
@@ -40,8 +41,8 @@ class comment(models.Model):
 
 class bid(models.Model):
 
-    idUser = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="bids_user")
+    #idUser = models.ForeignKey(
+    #    User, on_delete=models.CASCADE, related_name="bids_user")
     time = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 

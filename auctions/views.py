@@ -59,6 +59,30 @@ def watchlist_view(request):
     })
 
 
+@login_required
+def comment_view(request, id):
+    user = User.objects.get(username=request.user)
+    listing = listing.objects.get(pk=id)
+    if request.method == "POST":
+        form = comment_form(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = user
+            comment.save()
+            listing.comments.add(comment)
+            listing.save()
+
+            return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+        else:
+            return render(request, "auctions/comment.html", {
+                "form": form,
+                "listing_id": listing.id,
+            })
+    else:
+        return render(request, "auctions/comment.html", {
+            "form": comment_form(),
+            "listing_id": listing.id
+        })
 
 
 @login_required
@@ -109,7 +133,7 @@ def listings_view(request, id):
                 Listing.save()
             else:
                 price = float(request.POST["price"])
-                bid = Listing.bids.all()
+                bid = Listing.bid.all()
                 if user.username != Listing.owner.username:  # only let those who dont own the listing be able to bid
                     if price <= Listing.price:
                         return render(request, "auctions/listing.html", {
@@ -139,29 +163,6 @@ def listings_view(request, id):
         })
 
 
-def comment_view(request, id):
-    user = User.objects.get(username=request.user)
-    Listing = listing.objects.get(pk=id)
-    if request.method == "POST":
-        form = comment_form(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = user
-            comment.save()
-            Listing.comments.add(comment)
-            Listing.save()
-
-            return HttpResponseRedirect(reverse('listing', args=(Listing.id,)))
-        else:
-            return render(request, "auctions/comment.html", {
-                "form": form,
-                "listing_id": Listing.id,
-            })
-    else:
-        return render(request, "auctions/comment.html", {
-            "form": comment_form(),
-            "listing_id": Listing.id
-        })
 
 
 def register_view(request):

@@ -21,7 +21,7 @@
         <div class="card-text">{{ listing.description }}</div>
         <p class="card-text">Price: ${{ listing.price }}</p>
         <p class="card-text">Top Horizon: {{ listing.tophorizon }}
-        <p>{{ message }}</p>
+        <h3>{{ message }}</h3>
       </div>
       <form action="{% url 'watchlist' %}" method="POST">
         {% csrf_token %}
