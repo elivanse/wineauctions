@@ -1,19 +1,33 @@
 {% extends 'auctions/layout.html' %}
 {% block body %}
-  <h1 class="text-light">Watchlist</h1>
-  {% for listing in watchlist %}
-    <div class="container border p-2 m-2">
-        <div class="row">
-            <div class="col">
-                <img src="{{ listing.listing.image.url }}" alt="image" style="width: 300px; height: auto">
-            </div>
-            <div class="col text-left">
-                <h2 class="display-4">{{ listing.listing.item }}</h2>
-                <h4>Price: ${{ listing.listing.price }}</h4>
-                <p><small>{{ listing.listing.time }}</small></p>
-                <a href="{% url 'listing' listing.listing.id %}" type="submit" class="btn btn-primary">Go To Listing</a>
-            </div>
-        </div>
-    </div>
-  {% endfor %}
+<div class="container">
+  <div class="card" >
+    <h1 class="text-light">Watchlist</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Photo</th>
+          <th scope="col">Listing</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for listing in watchlist %}
+        <tr>
+          <th scope="row">
+            <img src="{{ listing.listing.photo.url }}" alt="image" style="width: 300px; height: auto">
+          </th>
+          <td>
+            {{ listing.listing.description }}
+            Price: ${{ listing.listing.price }}
+          </td>
+          <td>
+            <a href="{% url 'listing' listing.listing.id %}" type="submit" class="btn btn-primary">Go To Listing</a>
+          </td>
+        </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

@@ -15,11 +15,11 @@ def index(request):
 
 def login_view(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        usr = authenticate(request, username=username, password=password)
-        if usr is not None:
-            login(request, usr)
+        username_ = request.POST["username"]
+        password_ = request.POST["password"]
+        usr_ = authenticate(request, username=username_, password=password_)
+        if usr_ is not None:
+            login(request, usr_)
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "auctions/login.html", {
@@ -42,12 +42,12 @@ def categories_view(request):
 
 
 @login_required
-def category_listings(request, category):
-    listings = listing.objects.filter(category__in=category[0])
-    cat = dict(dicCategorie)
-    return render(request, 'auctions/specific.html', {
-        "listings": listings,
-        "category": cat[category]
+def category_listings(request, category_):
+    listings_ = listing.objects.filter(category__in=category_[0])
+    cat_ = dict(dicCategorie)
+    return render(request, 'auctions/categorie.html', {
+        "listings": listings_,
+        "category": cat_[category_]
     })
 
 
@@ -60,44 +60,40 @@ def watchlist_view(request):
 
 
 @login_required
-def comment_view(request, id):
-    user = User.objects.get(username=request.user)
-    listing = listing.objects.get(pk=id)
-    if request.method == "POST":
-        form = comment_form(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = user
-            comment.save()
-            listing.comments.add(comment)
-            listing.save()
-
-            return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
-        else:
-            return render(request, "auctions/comment.html", {
-                "form": form,
-                "listing_id": listing.id,
-            })
-    else:
-        return render(request, "auctions/comment.html", {
-            "form": comment_form(),
-            "listing_id": listing.id
+def add_watchlist_view(request, id):
+    user_ = User.objects.get(username=request.user)
+    listing_ = listing.objects.get(pk=id)
+    if request.POST.get("button") == "Watchlist":
+        watchlist_ = watchlist()
+        watchlist_.user = user_
+        watchlist_.listing = listing_
+        watchlist_.save()
+        # return HttpResponseRedirect(reverse('listing', args=(listing_.id,)))
+        return render(request, "auctions/listing.html", {
+            "listing": listing_,
+            "message": "Succesfully added to my Watchlist."
+        })
+    if request.POST.get("button") == "RWatchlist":
+        user_.watchlist.filter(listing=listing_).delete()
+        return render(request, "auctions/listing.html", {
+            "listing": listing_,
+            "message": "Succesfully removed  to my Watchlist."
         })
 
 
 @login_required
 def create_listings_view(request):
     if request.method == "POST":
-        user = User.objects.get(username=request.user)
-        form = listing_form(request.POST, request.FILES)
-        print(form)
-        if form.is_valid():
-            listing = form.save(commit=False)
-            listing.owner = user
+        user_ = User.objects.get(username=request.user)
+        form_ = listing_form(request.POST, request.FILES)
+        print(form_)
+        if form_.is_valid():
+            listing = form_.save(commit=False)
+            listing.owner = user_
             listing.save()
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "auctions/create_listings.html", {"form": form, "categories": dicCategorie})
+            return render(request, "auctions/create_listings.html", {"form": form_, "categories": dicCategorie})
     else:
         return render(request, "auctions/create_listings.html", {"form": listing_form(), "categories": dicCategorie})
 
@@ -115,74 +111,103 @@ def active_listings_view(request):
 
 @login_required
 def listings_view(request, id):
-    Listing = listing.objects.get(pk=id)
+    listing_ = listing.objects.get(pk=id)
     if request.method == "POST":
         user = User.objects.get(username=request.user)
         if request.POST.get("button") == "Watchlist":
-            if not user.watchlist.filter(listing=Listing):
+            if not user.watchlist.filter(listing=listing_):
                 watchlist = watchlist()
                 watchlist.user = user
-                watchlist.listing = Listing
+                watchlist.listing = listing_
                 watchlist.save()
             else:
-                user.watchlist.filter(listing=Listing).delete()
-            return HttpResponseRedirect(reverse('listing', args=(Listing.id,)))
-        if not Listing.closed:
+                user.watchlist.filter(listing=listing_).delete()
+            return HttpResponseRedirect(reverse('listing', args=(listing_.id,)))
+        if not listing_.closed:
             if request.POST.get("button") == "Close":
-                Listing.closed = True
-                Listing.save()
+                listing_.closed = True
+                listing_.save()
             else:
-                price = float(request.POST["price"])
-                bid = Listing.bid.all()
-                if user.username != Listing.owner.username:  # only let those who dont own the listing be able to bid
-                    if price <= Listing.price:
+                bid = listing_.bid.all()
+                if user.username != listing_.owner.username:  # no es el dueno
+                    if price <= listing_.price:
                         return render(request, "auctions/listing.html", {
-                            "listing": Listing,
+                            "listing": listing_,
                             "form": bid_form(),
-                            "message": "Error! Invalid bid amount!"
+                            "message": "Your bid has a wrong amount."
                         })
-                    form = bid_form(request.POST)
-                    if form.is_valid():
+                    form_ = bid_form(request.POST)
+                    if form_.is_valid():
                         # clean up this
-                        bid = form.save(commit=False)
-                        bid.user = user
-                        bid.save()
-                        Listing.bid.add(bid)
-                        Listing.price = price
-                        Listing.save()
+                        bid_ = form_.save(commit=False)
+                        bid_.user = user
+                        bid_.save()
+                        listing_.bid.add(bid_)
+                        listing_.price = price
+                        listing_.save()
                     else:
                         return render(request, 'auctions/listing.html', {
                             "form": form
                         })
-        return HttpResponseRedirect(reverse('listing', args=(Listing.id,)))
+                else:  # es el dueno
+                    return render(request, "auctions/listing.html", {
+                        "listing": listing_,
+                        "form": bid_form(),
+                        "message": "Owners cannot make bids!"
+                    })
+
+        return HttpResponseRedirect(reverse('listing', args=(listing_.id,)))
     else:
         return render(request, "auctions/listing.html", {
-            "listing": Listing,
+            "listing": listing_,
             "form": bid_form(),
             "message": ""
         })
 
 
+def comment_view(request, id):
+    user_ = User.objects.get(username=request.user)
+    listing_ = listing.objects.get(pk=id)
+    if request.method == "POST":
+        form_ = comment_form(request.POST)
+        if form_.is_valid():
+            comment_ = form_.save(commit=False)
+            comment_.user = user_
+            comment_.save()
+            listing_.comments.add(comment_)
+            listing_.save()
+
+            return HttpResponseRedirect(reverse('listing', args=(listing_.id,)))
+        else:
+            return render(request, "auctions/comment.html", {
+                "form": form_,
+                "listing_id": listing_.id,
+            })
+    else:
+        return render(request, "auctions/comment.html", {
+            "form": comment_form(),
+            "listing_id": listing_.id
+        })
 
 
 def register_view(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        email = request.POST["email"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
+        user_ = request.POST["username"]
+        password_ = request.POST["password"]
+        email_ = request.POST["email"]
+        confirmation_ = request.POST["confirmation"]
+        if password_ != confirmation_:
             return render(request, "auctions/register.html", {
                 "message": "Error. Passwords are different."
             })
         try:
-            usr = User.objects.create_user(username, email, password)
-            usr.save()
+            usr_ = User.objects.create_user(username_, email_, password_)
+            usr_.save()
         except IntegrityError:
             return render(request, "auctions/register.html", {
                 "message": "Error. User exists."
             })
-        login(request, usr)
+        login(request, usr_)
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")

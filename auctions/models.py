@@ -41,8 +41,7 @@ class comment(models.Model):
 
 class bid(models.Model):
 
-    #idUser = models.ForeignKey(
-    #    User, on_delete=models.CASCADE, related_name="bids_user")
+       # idUser = models.ForeignKey(        User, on_delete=models.CASCADE, related_name="bids_user")
     time = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -71,7 +70,6 @@ class listing(models.Model):
 
 class watchlist(models.Model):
 
-    wlTitle = models.CharField(max_length=64)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="watchlist")
     listing = models.ForeignKey(

@@ -1,5 +1,5 @@
-from django.urls import path
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.urls import path
 
 from . import views
 
@@ -9,6 +9,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("categories", views.categories_view, name="categories"),
     path("categories/<str:category>", views.category_listings, name="show"),
+    path("add_watchlist/<int:id>",views.add_watchlist_view,name="add_watchlist"),
     path("watchlist", views.watchlist_view, name="watchlist"),
     path("comment/<int:id>", views.comment_view, name="comment"),
     path("create_listings", views.create_listings_view, name="create_listings"),
