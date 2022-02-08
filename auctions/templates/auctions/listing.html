@@ -1,5 +1,5 @@
 {% extends 'auctions/layout.html' %}
-
+{% load static  %}
 {% block body %}
 {% if listing.closed %}
 <h1 class="text-light">
@@ -15,7 +15,7 @@
         <div class="card-title">
           <h4>Listing</h4>
         </div>
-        <img src="{{ listing.photo.url }}" alt="image" style="width: 300px; height: auto">
+        <img src="/static/media/{{ listing.photo.url }}" alt="image" style="width: 300px; height: auto">
         <div class="card-text">{{ listing.description }}</div>
         <p class="card-text">Price: ${{ listing.price }}</p>
         <p class="card-text">Top Horizon: {{ listing.tophorizon }}

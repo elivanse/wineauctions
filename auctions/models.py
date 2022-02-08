@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.fields import URLField
 
 # Models: Your application should have at least three models in
 # addition to the User model: one for auction listings,
@@ -61,8 +62,7 @@ class listing(models.Model):
     bid = models.ManyToManyField(bid, blank=True, related_name="bid")
     comments = models.ManyToManyField(
         comment, blank=True, related_name="comments")
-    photo = models.ImageField(
-        upload_to='static/media/', null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
     closed = models.BooleanField(default=False)
 
 # favoritos

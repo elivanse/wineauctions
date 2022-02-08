@@ -3,24 +3,20 @@
 {% if request.user.is_authenticated %}
 <h1 class="text-light">Active Listings</h1>
 
-<!-- <ul>
-            {% for listing in listings %}
-                <li>{{ listing.item }}: being sold for ${{ listing.price }} by {{ listing.owner.username }}</li>
-            {% endfor %}
-        </ul> -->
 <div class="container">
   <div class="card-group">
+
     {% for listing in listings %}
     {% if not listing.closed %}
     <style>
-      .card-img-top {
-        width: 100%;
-        height: 15vw;
-        object-fit: contain;
-      }
+.card-img-top {
+  width: 100%;
+  height: 15vw;
+  object-fit: contain;
+}
     </style>
     <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="{{ listing.photo }}" alt="Card image cap">
+      <img class="card-img-top" src="/static/media/{{ listing.photo }}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">{{ listing.description }}</h5>
         <a href="{% url 'listing' listing.id %}" class="btn btn-primary">go to listing</a>
@@ -29,6 +25,16 @@
 
     {% endif %}
     {% endfor %}
+
+  </div>
+</div>
+<div class="container">
+    <div class="card" style="width: 18rem;">
+      <ul>
+        {% for listing in listings %}
+        <li>{{ listing.description }}: being sold for ${{ listing.price }} by {{ listing.owner.username }}</li>
+        {% endfor %}
+      </ul>
   </div>
 </div>
 {% endif %}

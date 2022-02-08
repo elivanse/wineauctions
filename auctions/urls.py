@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 
@@ -14,6 +15,6 @@ urlpatterns = [
     path("comment/<int:id>", views.comment_view, name="comment"),
     path("create_listings", views.create_listings_view, name="create_listings"),
     path("listing/<int:id>", views.listings_view, name="listing"),
-    path("register", views.register_view, name="register")
+    path("register", views.register_view, name="register"),
 ]
 urlpatterns += staticfiles_urlpatterns()
