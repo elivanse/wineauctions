@@ -15,8 +15,8 @@
         <div class="card-title">
           <h4>Listing</h4>
         </div>
-        <img src="/static/media/{{ listing.photo.url }}" alt="image" style="width: 300px; height: auto">
-        <div class="card-text">{{ listing.description }}</div>
+        <img src="/static/media/{{ listing.photo }}" alt="image" style="width: 100px; height: auto">
+        <h5 class="card-title">{{ listing.description }}</h5>
         <p class="card-text">Price: ${{ listing.price }}</p>
         <p class="card-text">Top Horizon: {{ listing.tophorizon }}
         <form action="{% url 'add_watchlist' listing.id %}" method="POST">

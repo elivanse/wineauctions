@@ -42,8 +42,8 @@ def categories_view(request):
 
 
 @login_required
-def category_listings(request, category_):
-    listings_ = listing.objects.filter(category__in=category_[0])
+def add_category_view(request, category_):
+    listings_ = listing.objects.filter(category__in = category_[0])
     cat_ = dict(dicCategorie)
     return render(request, 'auctions/categorie.html', {
         "listings": listings_,

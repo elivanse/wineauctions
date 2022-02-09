@@ -15,7 +15,7 @@
           {% for listing in watchlist %}
         <tr>
           <th scope="row">
-            <img src="{{ listing.listing.photo }}" alt="image" style="width: 300px; height: auto">
+            <img src="/static/media/{{ listing.listing.photo }}" alt="image" style="width: 100px; height: auto">
           </th>
           <td>
             {{ listing.listing.description }}
