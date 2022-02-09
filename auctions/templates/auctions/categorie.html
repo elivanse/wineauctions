@@ -1,12 +1,34 @@
-<!--Active Listings Page: The default route of your web application 
-    should let users view all of the currently active auction listings. 
-    For each active listing, 
-    this page should display (at minimum) the title, 
-    description, current price, and photo (if one exists for the listing).-->
-{% extends "auctions/layout.html" %}
-
+{% extends 'auctions/layout.html' %}
 {% block body %}
-<h2 class="text-light">Active listings</h2>
-
-
+<div class="container">
+  <div class="card" >
+    <h1 class="text-light">Watchlist</h1>
+    <p>{{ category }}</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Photo</th>
+          <th scope="col">Listing</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for listing in listings %}
+        <tr>
+          <th scope="row">
+            <img src="/static/media/{{ listing.listing.photo }}" alt="image" style="width: 100px; height: auto">
+          </th>
+          <td>
+            {{ listing.listing.description }}
+            Price: ${{ listing.listing.price }}
+          </td>
+          <td>
+            <a href="{% url 'listing' listing.listing.id %}" type="submit" class="btn btn-primary">Go To Listing</a>
+          </td>
+        </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}
