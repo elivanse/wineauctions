@@ -8,10 +8,8 @@ from django.urls import reverse
 from .forms import *
 from .models import *
 
-
 def index(request):
     return render(request, "auctions/index.html", {"listings": listing.objects.all()})
-
 
 def login_view(request):
     if request.method == "POST":
@@ -28,11 +26,9 @@ def login_view(request):
     else:
         return render(request, "auctions/login.html")
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 @login_required
 def categories_view(request):

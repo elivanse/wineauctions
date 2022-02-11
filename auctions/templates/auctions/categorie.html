@@ -2,7 +2,7 @@
 {% block body %}
 <div class="container">
   <div class="card" >
-    <h1 class="text-light">Watchlist</h1>
+    <h1 class="text-light">Category</h1>
     <p>{{ category }}</p>
     <table class="table">
       <thead>
@@ -16,14 +16,14 @@
           {% for listing in listings %}
         <tr>
           <th scope="row">
-            <img src="/static/media/{{ listing.listing.photo }}" alt="image" style="width: 100px; height: auto">
+            <img src="/static/media/{{ listing.photo }}" alt="image" style="width: 100px; height: auto">
           </th>
           <td>
-            {{ listing.listing.description }}
-            Price: ${{ listing.listing.price }}
+            {{ listing.description }}
+            Price: ${{ listing.price }}
           </td>
           <td>
-            <a href="{% url 'listing' listing.listing.id %}" type="submit" class="btn btn-primary">Go To Listing</a>
+            <a href="{% url 'listing' listing.id %}" type="submit" class="btn btn-primary">Go To Listing</a>
           </td>
         </tr>
           {% endfor %}

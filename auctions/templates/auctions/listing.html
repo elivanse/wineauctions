@@ -19,6 +19,7 @@
         <h5 class="card-title">{{ listing.description }}</h5>
         <p class="card-text">Price: ${{ listing.price }}</p>
         <p class="card-text">Top Horizon: {{ listing.tophorizon }}
+        <p class="card-text">Category: {{ listing.category }}
         <form action="{% url 'add_watchlist' listing.id %}" method="POST">
           {% csrf_token %}
           <button type="submit" name="button" class="btn btn-primary" value="Watchlist">Add to my Watchlist</button>
